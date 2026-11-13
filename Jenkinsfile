@@ -2,13 +2,46 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK 25'
+        maven 'Maven-3.10'
+    }
+
     stages {
-        stage('Test Windows Command') {
+        stage('SCM Synchronization') {
             steps {
-                bat 'echo Hello from Jenkins'
-                bat 'whoami'
-                bat 'cd'
+                echo 'Pulling latest code...'
+                checkout scm
             }
+        }
+
+        stage('Static Verification') {
+            steps {
+                echo 'Checking Maven project...'
+                bat 'mvn validate'
+            }
+        }
+
+        stage('Compilation & Automated Testing') {
+            steps {
+                echo 'Compiling and running tests...'
+                bat 'mvn clean package'
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true,
+                          testResults: '**/target/surefire-reports/*.xml'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Build Failed!'
         }
     }
 }
