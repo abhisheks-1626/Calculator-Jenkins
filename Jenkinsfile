@@ -16,12 +16,20 @@ pipeline {
             }
         }
 
-        stage('Static Verification') {
-            steps {
-                echo 'Checking Maven project...'
-                bat 'mvn validate'
-            }
-        }
+        
+stage('Static Verification') {
+    steps {
+        echo 'Checking workspace and Maven...'
+        bat '''
+            echo WORKSPACE: %WORKSPACE%
+            cd
+            dir
+            where mvn
+            mvn -version
+            mvn validate
+        '''
+    }
+}
 
         stage('Compilation and Testing') {
             steps {
