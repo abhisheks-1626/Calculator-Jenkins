@@ -1,33 +1,38 @@
-
 pipeline {
     agent any
-
+    
+    
+    // Use tools Name configured in Jenkins
     tools {
         jdk 'JDK 25'
         maven 'Maven-3.10'
     }
 
+
     stages {
         stage('SCM Synchronization') {
             steps {
+                echo '📥 Pulling latest code changes from Git repository...'
                 checkout scm
             }
         }
 
         stage('Static Verification') {
             steps {
+                echo '🔍 Checking Maven project layout rules...'
                 bat 'mvn validate'
             }
         }
 
-        stage('Compilation & Testing') {
+        stage('Compilation & Automated Testing') {
             steps {
+                echo '⚙️ Compiling class layers and verifying test logic stability...'
                 bat 'mvn clean package'
             }
             post {
                 always {
-                    junit allowEmptyResults: true,
-                          testResults: '**/target/surefire-reports/*.xml'
+                    echo '📊 Publishing Unit Test trends to Jenkins Dashboard...'
+                    junit '**/target/surefire-reports/*.xml'
                 }
             }
         }
@@ -35,11 +40,10 @@ pipeline {
 
     post {
         success {
-            echo 'Build Successful!'
+            echo '✅ CI Pipeline completed flawlessly! Code stability confirmed.'
         }
         failure {
-            echo 'Build Failed!'
+            echo '❌ CI Pipeline broken. Check console logs for build failures or breaking test regressions.'
         }
     }
 }
-
