@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -10,21 +9,18 @@ pipeline {
     stages {
         stage('SCM Synchronization') {
             steps {
-                echo 'Pulling latest code...'
                 checkout scm
             }
         }
 
         stage('Static Verification') {
             steps {
-                echo 'Checking Maven project...'
                 bat 'mvn validate'
             }
         }
 
         stage('Compilation & Automated Testing') {
             steps {
-                echo 'Compiling and running tests...'
                 bat 'mvn clean package'
             }
             post {
@@ -38,7 +34,7 @@ pipeline {
 
     post {
         success {
-            echo 'CI Pipeline completed successfully!'
+            echo 'Build Successful!'
         }
         failure {
             echo 'Build Failed!'
