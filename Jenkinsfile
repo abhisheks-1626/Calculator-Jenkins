@@ -1,13 +1,10 @@
 pipeline {
     agent any
-    
-    
-    // Use tools Name configured in Jenkins
+
     tools {
         jdk 'JDK 25'
         maven 'Maven-3.10'
     }
-
 
     stages {
         stage('SCM Synchronization') {
@@ -36,9 +33,8 @@ pipeline {
                 }
             }
         }
-  
 
-   stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 echo 'Starting SonarQube analysis'
                 withSonarQubeEnv('SonarQube-Local') {
@@ -46,6 +42,7 @@ pipeline {
                 }
             }
         }
+    }
 
     post {
         success {
@@ -55,5 +52,4 @@ pipeline {
             echo 'Pipeline failed. Check Console Output.'
         }
     }
-
 }
