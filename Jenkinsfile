@@ -38,15 +38,14 @@ pipeline {
         }
   
 
-    stage('SonarQube Analysis') {
+   stage('SonarQube Analysis') {
             steps {
                 echo 'Starting SonarQube analysis'
                 withSonarQubeEnv('SonarQube-Local') {
-                    bat 'mvn sonar:sonar'
+                    bat 'mvn sonar:sonar -Dsonar.token=%SONAR_AUTH_TOKEN%'
                 }
             }
         }
-    }
 
     post {
         success {
