@@ -13,6 +13,13 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
+	    <sonar.projectKey>Simple-Calculator</sonar.projectKey>
+    	<sonar.projectName>Simple Calculator</sonar.projectName>
+    	<sonar.host.url>http://localhost:9000</sonar.host.url>
+
+    
+    
     </properties>
 
     <dependencies>
@@ -37,6 +44,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
             </plugin>
+            <plugin>
+    			<groupId>org.sonarsource.scanner.maven</groupId>
+    			<artifactId>sonar-maven-plugin</artifactId>
+    			<version>5.8.0.7211</version>
+			</plugin>
+
         </plugins>
     </build>
 </project>
