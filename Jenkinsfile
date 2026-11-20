@@ -2,6 +2,7 @@
 pipeline {
     agent any
 
+    // Jenkins configured tools
     tools {
         jdk 'JDK 25'
         maven 'Maven-3.10'
@@ -9,6 +10,7 @@ pipeline {
 
     stages {
 
+        // Stage 1: Git Synchronization
         stage('SCM Synchronization') {
             steps {
                 echo 'Pulling latest code changes from Git repository...'
@@ -16,6 +18,7 @@ pipeline {
             }
         }
 
+        // Stage 2: Maven Validation
         stage('Static Verification') {
             steps {
                 echo 'Checking Maven project layout rules...'
@@ -23,6 +26,7 @@ pipeline {
             }
         }
 
+        // Stage 3: Compilation and Unit Testing
         stage('Compilation & Automated Testing') {
             steps {
                 echo 'Compiling and running automated tests...'
@@ -37,15 +41,16 @@ pipeline {
             }
         }
 
+        // Stage 4: SonarQube Code Analysis
         stage('SonarQube Analysis') {
             steps {
-                echo 'Starting SonarQube analysis'
+                echo 'Starting SonarQube analysis...'
 
                 withSonarQubeEnv('SonarQube-Local') {
 
                     withCredentials([
                         string(
-                            credentialsId: 'sonar-token',
+                            credentialsId: 'sonarqube-token1',
                             variable: 'SONAR_TOKEN'
                         )
                     ]) {
@@ -57,13 +62,18 @@ pipeline {
         }
     }
 
+    // Pipeline Result
     post {
         success {
-            echo 'Build and SonarQube analysis completed!'
+            echo 'SUCCESS: Build, Testing and SonarQube Analysis completed!'
         }
 
         failure {
-            echo 'Pipeline failed. Check Console Output.'
+            echo 'FAILURE: Pipeline failed. Check Console Output.'
+        }
+
+        always {
+            echo 'Jenkins Pipeline execution completed.'
         }
     }
 }
